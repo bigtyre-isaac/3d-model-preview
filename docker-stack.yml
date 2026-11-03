@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  viewer:
+    image: ${VIEWER_IMAGE:-model-preview:latest}
+    environment:
+      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
+      UPLOAD_ALLOWED_IPS: "${UPLOAD_ALLOWED_IPS:-0.0.0.0/0 ::/0}"
+    ports:
+      - target: 80
+        published: ${PORT:-8080}
+        protocol: tcp
+        mode: host
+    volumes:
+      - type: bind
+        source: ${MODELS_DIR:-/srv/model-preview/models}
+        target: /srv/models
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.model-preview == true
+      restart_policy:
+        condition: any
+    stop_grace_period: 30s

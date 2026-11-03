@@ -1,0 +1,34 @@
+{
+    servers {
+        trusted_proxies static {$TRUSTED_PROXIES}
+        trusted_proxies_strict
+    }
+}
+
+:80 {
+    root * /srv
+    encode zstd gzip
+    @blockedUpload {
+        path /upload /upload/* /upload.html
+        not client_ip {$UPLOAD_ALLOWED_IPS:0.0.0.0/0 ::/0}
+    }
+    route {
+    respond @blockedUpload "Uploads are restricted." 403
+    @uploadPost {
+        path /upload
+        method POST
+    }
+    handle @uploadPost {
+        reverse_proxy 127.0.0.1:3000
+    }
+    handle /upload {
+        rewrite * /upload.html
+        file_server
+    }
+    handle {
+        file_server {
+            hide /srv/models/.upload-*
+        }
+    }
+    }
+}

@@ -1,0 +1,10 @@
+*
+!Dockerfile
+!config/
+!config/caddyfile
+!config/start.sh
+!src/
+!src/public/
+!src/public/**
+!src/upload/
+!src/upload/server.mjs

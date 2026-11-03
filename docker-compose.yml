@@ -1,0 +1,14 @@
+services:
+  viewer:
+    build: .
+    image: ${VIEWER_IMAGE:-model-preview:latest}
+    environment:
+      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
+      UPLOAD_ALLOWED_IPS: "${UPLOAD_ALLOWED_IPS:-0.0.0.0/0 ::/0}"
+    ports:
+      - "${PORT:-8080}:80"
+    volumes:
+      - type: bind
+        source: ${MODELS_DIR:-./models}
+        target: /srv/models
+    restart: unless-stopped
