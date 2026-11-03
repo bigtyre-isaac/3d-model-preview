@@ -1,33 +1,72 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Model viewer</title>
+  <style>
+    body {
+      margin: 0;
+      background: #eeeeee;
+      color: #222;
+      font: 15px system-ui, sans-serif;
+    }
+
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #status {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      pointer-events: none;
+    }
+  </style>
   <script type="module"
     src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js">
   </script>
 </head>
-<body style="margin:0;background:#eeeeee;color:#222;font:15px system-ui,sans-serif">
+<body>
   <model-viewer
     camera-controls
     auto-rotate
-    shadow-intensity="1"
-    style="width:100vw;height:100vh">
+    shadow-intensity="1">
   </model-viewer>
-  <div id="status" role="status" style="position:absolute;top:16px;left:16px;pointer-events:none"></div>
+  <div id="status" role="status"></div>
   <script>
     const params = new URLSearchParams(location.search);
     const status = document.querySelector('#status');
     const viewer = document.querySelector('model-viewer');
+    // Accept only six-digit hex colours; invalid values leave the CSS default.
     const background = (params.get('background') || 'eeeeee').replace(/^#/, '');
-    if (/^[0-9a-f]{6}$/i.test(background)) document.body.style.backgroundColor = '#' + background;
+    if (/^[0-9a-f]{6}$/i.test(background)) {
+      document.body.style.backgroundColor = '#' + background;
+    }
+
     const filename = params.get('model');
-    if (!filename) status.textContent = 'Specify a model with ?model=part.glb';
-    else if (filename.split('/').some(part => !part || part === '.' || part === '..') || /[\\\x00-\x1f]/.test(filename)) {
+    // Allow model subfolders, while rejecting traversal and backslash paths.
+    const hasInvalidPath = filename && (
+      filename.split('/').some(part => !part || part === '.' || part === '..')
+      || /[\\\x00-\x1f]/.test(filename)
+    );
+
+    if (!filename) {
+      status.textContent = 'Specify a model with ?model=part.glb';
+    } else if (hasInvalidPath) {
       status.textContent = 'Use a relative filename within the models folder.';
     } else {
       status.textContent = 'Loading ' + filename + '…';
-      viewer.addEventListener('load', () => { status.textContent = filename; });
-      viewer.addEventListener('error', () => { status.textContent = 'Unable to load ' + filename; });
+      viewer.addEventListener('load', () => {
+        status.textContent = filename;
+      });
+      viewer.addEventListener('error', () => {
+        status.textContent = 'Unable to load ' + filename;
+      });
+
+      // Encode segments separately to preserve subfolders and literal #/? in names.
       viewer.src = '/models/' + filename.split('/').map(encodeURIComponent).join('/');
     }
   </script>
