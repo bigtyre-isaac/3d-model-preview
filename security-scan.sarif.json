@@ -1,0 +1,453 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Docker Scout",
+          "informationUri": "https://docker.com/products/docker-scout",
+          "name": "docker scout",
+          "rules": [
+            {
+              "id": "GO-2026-5932",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "GO-2026-5932"
+              },
+              "helpUri": "https://scout.docker.com/v/GO-2026-5932?s=golang&n=crypto&ns=golang.org%2Fx&t=golang&vr=%3C0.58.1-0.20261009181718-2f1f834330b2",
+              "help": {
+                "text": "The golang.org/x/crypto/openpgp package is unsafe by design, has numerous known security issues, is not maintained, and should not be used.\n\nIf you are required to interoperate with OpenPGP systems and need a maintained package, consider github.com/ProtonMail/go-crypto/openpgp which is a maintained fork that aims to be a drop-in replacement for this package.\n",
+                "markdown": "> The golang.org/x/crypto/openpgp package is unsafe by design, has numerous known security issues, is not maintained, and should not be used.\n\nIf you are required to interoperate with OpenPGP systems and need a maintained package, consider github.com/ProtonMail/go-crypto/openpgp which is a maintained fork that aims to be a drop-in replacement for this package.\n\n|                                                       |\n|Package         pkg:golang/golang.org/x/crypto@0.57.0  |\n|Affected range  <0.58.1-0.20261009181718-2f1f834330b2  |\n|Fixed version   0.58.1-0.20261009181718-2f1f834330b2   |\n"
+              },
+              "properties": {
+                "affected_version": "<0.58.1-0.20261009181718-2f1f834330b2",
+                "cvssV3_severity": "UNSPECIFIED",
+                "fixed_version": "0.58.1-0.20261009181718-2f1f834330b2",
+                "purls": [
+                  "pkg:golang/golang.org/x/crypto@0.57.0"
+                ],
+                "security-severity": "3.1",
+                "tags": [
+                  "UNSPECIFIED"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-97045",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-97045"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-97045?s=golang&n=net&ns=golang.org%2Fx&t=golang&vr=%3C0.62.0",
+              "help": {
+                "text": "In childTextNodesAreLiteral, walking up the tree previously stopped at the nearest foreign ancestor once an HTML integration point was found. However, that integration point may itself be a descendant of an element that was foster-parented into a foreign namespace (such as <mglyph> or <malignmark> fostered under <mtext>), causing a parser to resolve the subtree in a different foreign namespace upon re-parsing the rendered output.\n\nContinue walking the full ancestor chain and verify that every transition from a non-empty namespace occurs at an HTML integration point before emitting literal text.\n",
+                "markdown": "> In childTextNodesAreLiteral, walking up the tree previously stopped at the nearest foreign ancestor once an HTML integration point was found. However, that integration point may itself be a descendant of an element that was foster-parented into a foreign namespace (such as <mglyph> or <malignmark> fostered under <mtext>), causing a parser to resolve the subtree in a different foreign namespace upon re-parsing the rendered output.\n\nContinue walking the full ancestor chain and verify that every transition from a non-empty namespace occurs at an HTML integration point before emitting literal text.\n\n|                                                    |\n|Package         pkg:golang/golang.org/x/net@0.60.0  |\n|Affected range  <0.62.0                             |\n|Fixed version   0.62.0                              |\n"
+              },
+              "properties": {
+                "affected_version": "<0.62.0",
+                "cvssV3_severity": "MEDIUM",
+                "fixed_version": "0.62.0",
+                "purls": [
+                  "pkg:golang/golang.org/x/net@0.60.0"
+                ],
+                "security-severity": "6.1",
+                "tags": [
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-116585",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-116585: Improper Validation of Array Index"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-116585?s=github&n=v3&ns=github.com%2Fgo-jose%2Fgo-jose&t=golang&vr=%3C%3D3.0.5",
+              "help": {
+                "text": "### Summary\n\nDecrypting a ciphertext with \"A128CBC-HS256\", \"A192CBC-HS384\", or \"A256CBC-HS512\" can result in a panic on untrusted input.\n\nNote this advisory is the same as https://github.com/go-jose/go-jose/security/advisories/GHSA-6mp9-8xrw-74r4.\n\n### Details\n\nInsufficient validation of parameters can lead to attempting to index into an empty buffer. See https://github.com/go-jose/go-jose/pull/292.\n\n### Workarounds\n\nIf the application does not require the CBC-HMAC modes for content encryption, and is using github.com/go-jose/go-jose/v4, do not include them in the list of ContentEncryption algorithms passed to ParseEncrypted / ParseEncryptedJSON / ParseEncryptedCompact.\n\n### Impact\n\nDenial of service vulnerability. Any application which decrypts untrusted ciphertexts with the indicated algorithms is affected.\n\n### Acknowledgements\n\nThanks to Joshua Rogers of AISLE Research for reporting this problem.\n",
+                "markdown": "> ### Summary\n\nDecrypting a ciphertext with \"A128CBC-HS256\", \"A192CBC-HS384\", or \"A256CBC-HS512\" can result in a panic on untrusted input.\n\nNote this advisory is the same as https://github.com/go-jose/go-jose/security/advisories/GHSA-6mp9-8xrw-74r4.\n\n### Details\n\nInsufficient validation of parameters can lead to attempting to index into an empty buffer. See https://github.com/go-jose/go-jose/pull/292.\n\n### Workarounds\n\nIf the application does not require the CBC-HMAC modes for content encryption, and is using github.com/go-jose/go-jose/v4, do not include them in the list of ContentEncryption algorithms passed to ParseEncrypted / ParseEncryptedJSON / ParseEncryptedCompact.\n\n### Impact\n\nDenial of service vulnerability. Any application which decrypts untrusted ciphertexts with the indicated algorithms is affected.\n\n### Acknowledgements\n\nThanks to Joshua Rogers of AISLE Research for reporting this problem.\n\n|                                                                                                                                                  |\n|Package                                                                                           pkg:golang/github.com/go-jose/go-jose/v3@3.0.5  |\n|Affected range                                                                                    <=3.0.5                                         |\n|Fixed version                                                                                     not fixed                                       |\n|[[CVSS Score 6.9] [CVSS Vector CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N]]                                                  |\n"
+              },
+              "properties": {
+                "affected_version": "<=3.0.5",
+                "cvssV3": 6.9,
+                "cvssV3_severity": "MEDIUM",
+                "cvssV3_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+                "fixed_version": "not fixed",
+                "purls": [
+                  "pkg:golang/github.com/go-jose/go-jose/v3@3.0.5"
+                ],
+                "security-severity": "6.9",
+                "tags": [
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-116586",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-116586: Uncontrolled Recursion"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-116586?s=github&n=v3&ns=github.com%2Fgo-jose%2Fgo-jose&t=golang&vr=%3C%3D3.0.5",
+              "help": {
+                "text": "### Summary\n\nParsing deeply nested JSON structures can hit Go's stack limit, causing the application to crash.\n\nNote: this advisory is the same as https://github.com/go-jose/go-jose/security/advisories/GHSA-6mp9-8xrw-74r4.\n\n### Impact\n\nDenial of service vulnerability. Any application that parses untrusted JSON via go-jose is exposed.\n\n### Workarounds\n\nReject large inputs before parsing them.\n\n### Acknowledgements\n\nThanks to Dohyun Kim (@azza999), Joshua Rogers of AISLE Research, and Sueun Cho for alerting us to the need to patch this.\n",
+                "markdown": "> ### Summary\n\nParsing deeply nested JSON structures can hit Go's stack limit, causing the application to crash.\n\nNote: this advisory is the same as https://github.com/go-jose/go-jose/security/advisories/GHSA-6mp9-8xrw-74r4.\n\n### Impact\n\nDenial of service vulnerability. Any application that parses untrusted JSON via go-jose is exposed.\n\n### Workarounds\n\nReject large inputs before parsing them.\n\n### Acknowledgements\n\nThanks to Dohyun Kim (@azza999), Joshua Rogers of AISLE Research, and Sueun Cho for alerting us to the need to patch this.\n\n|                                                                                                                                                  |\n|Package                                                                                           pkg:golang/github.com/go-jose/go-jose/v3@3.0.5  |\n|Affected range                                                                                    <=3.0.5                                         |\n|Fixed version                                                                                     not fixed                                       |\n|[[CVSS Score 6.9] [CVSS Vector CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N]]                                                  |\n"
+              },
+              "properties": {
+                "affected_version": "<=3.0.5",
+                "cvssV3": 6.9,
+                "cvssV3_severity": "MEDIUM",
+                "cvssV3_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+                "fixed_version": "not fixed",
+                "purls": [
+                  "pkg:golang/github.com/go-jose/go-jose/v3@3.0.5"
+                ],
+                "security-severity": "6.9",
+                "tags": [
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-116587",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-116587: Inefficient Algorithmic Complexity"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-116587?s=github&n=v3&ns=github.com%2Fgo-jose%2Fgo-jose&t=golang&vr=%3C%3D3.0.5",
+              "help": {
+                "text": "### Summary\n\nA crafted RSA key inside a JWK can cause operations that parse JWKs to consume excess CPU.\n\n### Details\n\ngo-jose does not check for bounds on RSA modulus and primes before validating them. Values are passed directly to `crypto/rsa.PrivateKey.Validate()`. On Go 1.24+, this takes cubic time complexity with respect to the RSA modulus and primes. This allows an attacker to supply a crafted JWK to consume excessive CPU.\n\nhttps://github.com/go-jose/go-jose/blob/5b371aecfcf7aabe06068d67da4344591ecddc76/jwk.go#L655-L700\n\n### Proof of concept\n\nNo special configuration of go-jose is required to reproduce this vulnerability.\n\n```go\npackage main\n\nimport (\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"fmt\"\n\t\"math/big\"\n\t\"time\"\n\n\t\"github.com/go-jose/go-jose/v4\"\n)\n\nfunc main() {\n\t// The RSA parameters can be complete junk. The CPU cost is in validating them.\n\tprimeBits := 16384\n\tp := new(big.Int).Lsh(big.NewInt(1), uint(primeBits-1))\n\tp.SetBit(p, 0, 1)\n\tn := new(big.Int).Lsh(big.NewInt(1), 2048)\n\te := big.NewInt(65537)\n\td := big.NewInt(3)\n\tq := big.NewInt(3)\n\n\tjwk := map[string]string{\n\t\t\"kty\": \"RSA\",\n\t\t\"n\":   base64.RawURLEncoding.EncodeToString(n.Bytes()),\n\t\t\"e\":   base64.RawURLEncoding.EncodeToString(e.Bytes()),\n\t\t\"d\":   base64.RawURLEncoding.EncodeToString(d.Bytes()),\n\t\t\"p\":   base64.RawURLEncoding.EncodeToString(p.Bytes()),\n\t\t\"q\":   base64.RawURLEncoding.EncodeToString(q.Bytes()),\n\t}\n\n\tprotected := map[string]any{\n\t\t\"alg\": \"RS256\",\n\t\t\"jwk\": jwk,\n\t}\n\tprotJSON, _ := json.Marshal(protected)\n\n\tjws := map[string]string{\n\t\t\"protected\": base64.RawURLEncoding.EncodeToString(protJSON),\n\t\t\"payload\":   base64.RawURLEncoding.EncodeToString([]byte(`{}`)),\n\t\t\"signature\": base64.RawURLEncoding.EncodeToString([]byte(\"not-a-real-signature\")),\n\t}\n\tjwsJSON, _ := json.Marshal(jws)\n\n\tstart := time.Now()\n\t_, err := jose.ParseSigned(string(jwsJSON), []jose.SignatureAlgorithm{jose.RS256})\n\telapsed := time.Since(start)\n\n\tfmt.Printf(\"prime bits: %d\\n\", primeBits)\n\tfmt.Printf(\"parse time: %s\\n\", elapsed)\n\tfmt.Printf(\"parse error: %v\\n\", err)\n}\n```\n\n### Impact\n\nDenial of service vulnerability. Any application that uses go-jose to parse JWKs from untrusted sources is affected and should patch immediately.\n\n### Credits\n\nReported by Yuval Saggie and Mor Weinberger (powered by Echo Frontier)\n",
+                "markdown": "> ### Summary\n\nA crafted RSA key inside a JWK can cause operations that parse JWKs to consume excess CPU.\n\n### Details\n\ngo-jose does not check for bounds on RSA modulus and primes before validating them. Values are passed directly to `crypto/rsa.PrivateKey.Validate()`. On Go 1.24+, this takes cubic time complexity with respect to the RSA modulus and primes. This allows an attacker to supply a crafted JWK to consume excessive CPU.\n\nhttps://github.com/go-jose/go-jose/blob/5b371aecfcf7aabe06068d67da4344591ecddc76/jwk.go#L655-L700\n\n### Proof of concept\n\nNo special configuration of go-jose is required to reproduce this vulnerability.\n\n```go\npackage main\n\nimport (\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"fmt\"\n\t\"math/big\"\n\t\"time\"\n\n\t\"github.com/go-jose/go-jose/v4\"\n)\n\nfunc main() {\n\t// The RSA parameters can be complete junk. The CPU cost is in validating them.\n\tprimeBits := 16384\n\tp := new(big.Int).Lsh(big.NewInt(1), uint(primeBits-1))\n\tp.SetBit(p, 0, 1)\n\tn := new(big.Int).Lsh(big.NewInt(1), 2048)\n\te := big.NewInt(65537)\n\td := big.NewInt(3)\n\tq := big.NewInt(3)\n\n\tjwk := map[string]string{\n\t\t\"kty\": \"RSA\",\n\t\t\"n\":   base64.RawURLEncoding.EncodeToString(n.Bytes()),\n\t\t\"e\":   base64.RawURLEncoding.EncodeToString(e.Bytes()),\n\t\t\"d\":   base64.RawURLEncoding.EncodeToString(d.Bytes()),\n\t\t\"p\":   base64.RawURLEncoding.EncodeToString(p.Bytes()),\n\t\t\"q\":   base64.RawURLEncoding.EncodeToString(q.Bytes()),\n\t}\n\n\tprotected := map[string]any{\n\t\t\"alg\": \"RS256\",\n\t\t\"jwk\": jwk,\n\t}\n\tprotJSON, _ := json.Marshal(protected)\n\n\tjws := map[string]string{\n\t\t\"protected\": base64.RawURLEncoding.EncodeToString(protJSON),\n\t\t\"payload\":   base64.RawURLEncoding.EncodeToString([]byte(`{}`)),\n\t\t\"signature\": base64.RawURLEncoding.EncodeToString([]byte(\"not-a-real-signature\")),\n\t}\n\tjwsJSON, _ := json.Marshal(jws)\n\n\tstart := time.Now()\n\t_, err := jose.ParseSigned(string(jwsJSON), []jose.SignatureAlgorithm{jose.RS256})\n\telapsed := time.Since(start)\n\n\tfmt.Printf(\"prime bits: %d\\n\", primeBits)\n\tfmt.Printf(\"parse time: %s\\n\", elapsed)\n\tfmt.Printf(\"parse error: %v\\n\", err)\n}\n```\n\n### Impact\n\nDenial of service vulnerability. Any application that uses go-jose to parse JWKs from untrusted sources is affected and should patch immediately.\n\n### Credits\n\nReported by Yuval Saggie and Mor Weinberger (powered by Echo Frontier)\n\n|                                                                                                                               |\n|Package                                                                        pkg:golang/github.com/go-jose/go-jose/v3@3.0.5  |\n|Affected range                                                                 <=3.0.5                                         |\n|Fixed version                                                                  not fixed                                       |\n|[[CVSS Score 7.5] [CVSS Vector CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H]]                                                  |\n"
+              },
+              "properties": {
+                "affected_version": "<=3.0.5",
+                "cvssV3": 7.5,
+                "cvssV3_severity": "HIGH",
+                "cvssV3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "fixed_version": "not fixed",
+                "purls": [
+                  "pkg:golang/github.com/go-jose/go-jose/v3@3.0.5"
+                ],
+                "security-severity": "7.5",
+                "tags": [
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-78661",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-78661"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-78661?s=golang&n=net&ns=golang.org%2Fx&t=golang&vr=%3C0.62.0",
+              "help": {
+                "text": "When coalescing adjacent text nodes in addText and fosterParent, appending to an existing TextNode's Data via string concatenation (n.Data += text) reallocated and copied the accumulated string on every token. Inputs containing many short text runs separated by ignored end tags (such as \"a</x>\") caused O(n^2) allocations and byte copies.\n\nAccumulate coalesced text in per-node byte slices during parsing and materialize Data strings once at the end of parse.\n",
+                "markdown": "> When coalescing adjacent text nodes in addText and fosterParent, appending to an existing TextNode's Data via string concatenation (n.Data += text) reallocated and copied the accumulated string on every token. Inputs containing many short text runs separated by ignored end tags (such as \"a</x>\") caused O(n^2) allocations and byte copies.\n\nAccumulate coalesced text in per-node byte slices during parsing and materialize Data strings once at the end of parse.\n\n|                                                    |\n|Package         pkg:golang/golang.org/x/net@0.60.0  |\n|Affected range  <0.62.0                             |\n|Fixed version   0.62.0                              |\n"
+              },
+              "properties": {
+                "affected_version": "<0.62.0",
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "0.62.0",
+                "purls": [
+                  "pkg:golang/golang.org/x/net@0.60.0"
+                ],
+                "security-severity": "7.5",
+                "tags": [
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-107891",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-107891"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-107891?s=alpine&n=musl&ns=alpine&t=apk&osn=alpine&osv=3.24&vr=%3C1.2.6-r6",
+              "help": {
+                "text": "\n",
+                "markdown": "> \n\n|                                                                             |\n|Package         pkg:apk/alpine/musl@1.2.6-r3?os_name=alpine&os_version=3.24  |\n|Affected range  <1.2.6-r6                                                    |\n|Fixed version   1.2.6-r6                                                     |\n"
+              },
+              "properties": {
+                "affected_version": "<1.2.6-r6",
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "1.2.6-r6",
+                "purls": [
+                  "pkg:apk/alpine/musl@1.2.6-r3?os_name=alpine&os_version=3.24"
+                ],
+                "security-severity": "8.1",
+                "tags": [
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-119586",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-119586"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-119586?s=alpine&n=sqlite&ns=alpine&t=apk&osn=alpine&osv=3.24&vr=%3C%3D3.53.4-r0",
+              "help": {
+                "text": "\n",
+                "markdown": "> \n\n|                                                                                |\n|Package         pkg:apk/alpine/sqlite@3.53.4-r0?os_name=alpine&os_version=3.24  |\n|Affected range  <=3.53.4-r0                                                     |\n|Fixed version   not fixed                                                       |\n"
+              },
+              "properties": {
+                "affected_version": "<=3.53.4-r0",
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "not fixed",
+                "purls": [
+                  "pkg:apk/alpine/sqlite@3.53.4-r0?os_name=alpine&os_version=3.24"
+                ],
+                "security-severity": "8.5",
+                "tags": [
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-116591",
+              "name": "OsPackageVulnerability",
+              "shortDescription": {
+                "text": "CVE-2026-116591"
+              },
+              "helpUri": "https://scout.docker.com/v/CVE-2026-116591?s=golang&n=compress&ns=github.com%2Fklauspost&t=golang&vr=%3C1.20.2",
+              "help": {
+                "text": "Panic on two-block frames in github.com/klauspost/compress\n",
+                "markdown": "> Panic on two-block frames in github.com/klauspost/compress\n\n|                                                                 |\n|Package         pkg:golang/github.com/klauspost/compress@1.20.1  |\n|Affected range  <1.20.2                                          |\n|Fixed version   1.20.2                                           |\n"
+              },
+              "properties": {
+                "affected_version": "<1.20.2",
+                "cvssV3_severity": "HIGH",
+                "fixed_version": "1.20.2",
+                "purls": [
+                  "pkg:golang/github.com/klauspost/compress@1.20.1"
+                ],
+                "security-severity": "8.7",
+                "tags": [
+                  "HIGH"
+                ]
+              }
+            }
+          ],
+          "version": "1.28.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "GO-2026-5932",
+          "ruleIndex": 0,
+          "kind": "fail",
+          "level": "none",
+          "message": {
+            "text": "Vulnerability   :GO-2026-5932                           \nSeverity        :UNSPECIFIED                            \nPackage         :pkg:golang/golang.org/x/crypto@0.57.0  \nAffected range  :<0.58.1-0.20261009181718-2f1f834330b2  \nFixed version   :0.58.1-0.20261009181718-2f1f834330b2   \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-97045",
+          "ruleIndex": 1,
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-97045                      \nSeverity         :MEDIUM                              \nPackage          :pkg:golang/golang.org/x/net@0.60.0  \nAffected range   :<0.62.0                             \nFixed version    :0.62.0                              \nEPSS Score       :0.002670                            \nEPSS Percentile  :0.189930                            \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-116585",
+          "ruleIndex": 2,
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-116585                                                  \nSeverity         :MEDIUM                                                           \nPackage          :pkg:golang/github.com/go-jose/go-jose/v3@3.0.5                   \nAffected range   :<=3.0.5                                                          \nFixed version    :not fixed                                                        \nCVSS Score       :6.9                                                              \nCVSS Vector      :CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N  \nEPSS Score       :0.002640                                                         \nEPSS Percentile  :0.184470                                                         \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-116586",
+          "ruleIndex": 3,
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-116586                                                  \nSeverity         :MEDIUM                                                           \nPackage          :pkg:golang/github.com/go-jose/go-jose/v3@3.0.5                   \nAffected range   :<=3.0.5                                                          \nFixed version    :not fixed                                                        \nCVSS Score       :6.9                                                              \nCVSS Vector      :CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N  \nEPSS Score       :0.002920                                                         \nEPSS Percentile  :0.219370                                                         \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-116587",
+          "ruleIndex": 4,
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-116587                                 \nSeverity         :HIGH                                            \nPackage          :pkg:golang/github.com/go-jose/go-jose/v3@3.0.5  \nAffected range   :<=3.0.5                                         \nFixed version    :not fixed                                       \nCVSS Score       :7.5                                             \nCVSS Vector      :CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H    \nEPSS Score       :0.003660                                        \nEPSS Percentile  :0.307430                                        \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-78661",
+          "ruleIndex": 5,
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-78661                      \nSeverity         :HIGH                                \nPackage          :pkg:golang/golang.org/x/net@0.60.0  \nAffected range   :<0.62.0                             \nFixed version    :0.62.0                              \nEPSS Score       :0.004090                            \nEPSS Percentile  :0.354810                            \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-107891",
+          "ruleIndex": 6,
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-107891                                              \nSeverity         :HIGH                                                         \nPackage          :pkg:apk/alpine/musl@1.2.6-r3?os_name=alpine&os_version=3.24  \nAffected range   :<1.2.6-r6                                                    \nFixed version    :1.2.6-r6                                                     \nEPSS Score       :0.005490                                                     \nEPSS Percentile  :0.462790                                                     \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lib/apk/db/installed"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lib/ld-musl-x86_64.so.1"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/sbin/ldconfig"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/getconf"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/getent"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/iconv"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/ldd"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-119586",
+          "ruleIndex": 7,
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-119586                                                 \nSeverity         :HIGH                                                            \nPackage          :pkg:apk/alpine/sqlite@3.53.4-r0?os_name=alpine&os_version=3.24  \nAffected range   :<=3.53.4-r0                                                     \nFixed version    :not fixed                                                       \nEPSS Score       :0.015450                                                        \nEPSS Percentile  :0.751970                                                        \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/lib/apk/db/installed"
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/lib/libsqlite3.so.3.53.4"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-116591",
+          "ruleIndex": 8,
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerability    :CVE-2026-116591                                  \nSeverity         :HIGH                                             \nPackage          :pkg:golang/github.com/klauspost/compress@1.20.1  \nAffected range   :<1.20.2                                          \nFixed version    :1.20.2                                           \nEPSS Score       :0.003330                                         \nEPSS Percentile  :0.267240                                         \n"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/usr/bin/caddy"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

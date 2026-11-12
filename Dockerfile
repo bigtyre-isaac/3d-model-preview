@@ -5,8 +5,10 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 
 # Keep the web server and local account/upload API in one deployable image.
-FROM caddy:2.9-alpine
-RUN apk add --no-cache nodejs bash tini
+FROM caddy:2.11.9-alpine
+# Refresh inherited system libraries as well as installing runtime dependencies.
+RUN apk upgrade --no-cache \
+    && apk add --no-cache nodejs bash tini
 COPY --from=dependencies /app/node_modules /app/node_modules
 COPY config/caddyfile /etc/caddy/Caddyfile
 COPY src/public/ /srv/
