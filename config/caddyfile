@@ -1,23 +1,23 @@
-{
-    servers {
-        # Trust forwarded addresses only from explicitly configured proxy networks.
-        trusted_proxies static {$TRUSTED_PROXIES}
-        trusted_proxies_strict
-    }
-}
-
 :80 {
-    root * /srv
+    root * {$PUBLIC_ROOT:/srv}
     encode zstd gzip
-
-    @blockedUpload {
-        path /upload /upload/* /upload.html
-        not client_ip {$UPLOAD_ALLOWED_IPS:0.0.0.0/0 ::/0}
+    # Uploaded files are data, including when someone uploads HTML or SVG.
+    header /models/* {
+        Content-Disposition attachment
+        X-Content-Type-Options nosniff
+        Content-Security-Policy sandbox
     }
     route {
-        # Preserve this ordering: reject uploads before proxying or serving HTML.
-        respond @blockedUpload "Uploads are restricted." 403
-
+        # Models keep their persistent mount when development pages come from source.
+        handle /models/* {
+            root * /srv
+            file_server {
+                hide /srv/models/.upload-*
+            }
+        }
+        handle /api/* {
+            reverse_proxy 127.0.0.1:3000
+        }
         @uploadPost {
             path /upload
             method POST
@@ -25,15 +25,16 @@
         handle @uploadPost {
             reverse_proxy 127.0.0.1:3000
         }
-
         handle /upload {
             rewrite * /upload.html
             file_server
         }
-
+        handle /account {
+            rewrite * /account.html
+            file_server
+        }
         handle {
             file_server {
-                # Incomplete uploads must never be served as model files.
                 hide /srv/models/.upload-*
             }
         }

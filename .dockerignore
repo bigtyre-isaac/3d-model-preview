@@ -8,3 +8,7 @@
 !src/public/**
 !src/upload/
 !src/upload/server.mjs
+
+!src/upload/**
+!package.json
+!package-lock.json

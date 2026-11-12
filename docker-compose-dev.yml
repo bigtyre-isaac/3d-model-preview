@@ -1,0 +1,26 @@
+# Run directly with: docker compose -f docker-compose-dev.yml up -d --build
+services:
+  viewer:
+    # Inherit the image, ports, environment, and persistent storage automatically.
+    extends:
+      file: docker-compose.yml
+      service: viewer
+    environment:
+      API_WATCH: "true"
+      API_ENTRYPOINT: /app/src/server.mjs
+      PUBLIC_ROOT: /srv/public
+    volumes:
+      # Caddy serves changed HTML, CSS, and browser JavaScript on the next refresh.
+      - type: bind
+        source: ./src/public
+        target: /srv/public
+        read_only: true
+      # Mount beside node_modules rather than hiding the image's installed dependencies.
+      - type: bind
+        source: ./src/upload
+        target: /app/src
+        read_only: true
+      - type: bind
+        source: ./config/start.sh
+        target: /app/start.sh
+        read_only: true

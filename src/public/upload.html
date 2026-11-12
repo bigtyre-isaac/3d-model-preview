@@ -1,79 +1,241 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Upload model</title>
-  <style>
-    body {
-      max-width: 560px;
-      margin: 60px auto;
-      padding: 0 24px;
-      background: #eee;
-      color: #222;
-      font: 16px system-ui, sans-serif;
-    }
-
-    input, button {
-      display: block;
-      margin: 20px 0;
-    }
-  </style>
-</head>
-<body>
-  <h1>Upload model</h1>
-  <p>Choose a file up to 50 MB. An existing file with the same name will be replaced. The viewer supports GLB and glTF; related texture and buffer files can also be uploaded here.</p>
-  <form>
-    <input type="file" required aria-label="Model or supporting file">
-    <button>Upload</button>
-  </form>
-  <p id="status" role="status"></p>
-  <a id="view" hidden>View model</a>
-  <script>
-    const MAX_UPLOAD_BYTES = 50_000_000;
-    const form = document.querySelector('form');
-    const fileInput = document.querySelector('input');
-    const status = document.querySelector('#status');
-    const link = document.querySelector('#view');
-    const button = document.querySelector('button');
-
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
-      const file = fileInput.files[0];
-      link.hidden = true;
-
-      // Give immediate feedback; the server independently enforces this limit.
-      if (!file || file.size > MAX_UPLOAD_BYTES) {
-        status.textContent = 'Choose a file no larger than 50 MB.';
-        return;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload model</title>
+    <style>
+      * {
+        box-sizing: border-box;
       }
 
-      // Prevent duplicate submissions until the request finishes.
-      button.disabled = true;
-      status.textContent = 'Uploading…';
+      body {
+        margin: 0;
+        padding: 64px 20px;
+        background: #eee;
+        color: #222;
+        font: 15px/1.5 system-ui, sans-serif;
+      }
 
-      try {
-        // The API accepts raw file bytes, rather than a multipart form body.
-        const response = await fetch('/upload?filename=' + encodeURIComponent(file.name), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/octet-stream' },
-          body: file,
-        });
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(result.error || 'Upload failed.');
+      .upload-card {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 32px;
+        border: 1px solid #e2e2e2;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+      }
+
+      nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+      }
+
+      a {
+        color: #43566b;
+        text-underline-offset: 3px;
+      }
+
+      nav a {
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #1b3047;
+        text-decoration: underline;
+      }
+
+      h1 {
+        margin: 24px 0 8px;
+        font-size: 26px;
+        line-height: 1.25;
+        letter-spacing: -0.5px;
+      }
+
+      p {
+        color: #666;
+      }
+
+      label {
+        display: block;
+        margin: 24px 0 18px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      input {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+        padding: 12px;
+        border: 1px solid #cfd3d8;
+        border-radius: 7px;
+        background: #f7f8fa;
+        font: inherit;
+      }
+
+      input::file-selector-button {
+        margin-right: 12px;
+        padding: 7px 10px;
+        border: 1px solid #d5d9de;
+        border-radius: 5px;
+        background: #fff;
+        color: #34475a;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px 16px;
+        border: 1px solid #34475a;
+        border-radius: 7px;
+        background: #34475a;
+        color: #fff;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #243545;
+      }
+
+      button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      input:focus-visible,
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #adc4df;
+        outline-offset: 3px;
+      }
+
+      #status {
+        margin: 12px 0 0;
+        overflow-wrap: anywhere;
+      }
+
+      #status:empty {
+        display: none;
+      }
+
+      #view {
+        display: inline-block;
+        margin-top: 12px;
+      }
+
+      #view[hidden] {
+        display: none;
+      }
+
+      @media (max-width: 520px) {
+        body {
+          padding: 24px 16px;
         }
 
-        status.textContent = 'Uploaded ' + result.filename;
-        // Supporting buffers/textures can upload, but cannot open in the viewer.
-        link.href = '/?model=' + encodeURIComponent(result.filename);
-        link.hidden = !/\.(glb|gltf)$/i.test(result.filename);
-      } catch (error) {
-        status.textContent = error.message;
-      } finally {
-        button.disabled = false;
+        .upload-card {
+          padding: 24px;
+        }
       }
-    });
-  </script>
-</body>
+    </style>
+  </head>
+  <body>
+    <main class="upload-card">
+      <nav>
+        <a href="/">Viewer / models</a>
+        <a href="/account">Accounts</a>
+      </nav>
+      <h1>Upload model</h1>
+      <p>
+        Choose a file up to 50 MB. An existing file with the same name will be replaced.
+        The viewer supports GLB and glTF; related texture and buffer files can also be uploaded here.
+      </p>
+      <form>
+        <label>
+          Model or supporting file
+          <input type="file" required />
+        </label>
+        <button>Upload</button>
+      </form>
+      <p id="status" role="status"></p>
+      <a id="view" hidden>View model</a>
+    </main>
+    <script>
+      const MAX_UPLOAD_BYTES = 50_000_000;
+      const form = document.querySelector('form');
+      const fileInput = document.querySelector('input');
+      const status = document.querySelector('#status');
+      const link = document.querySelector('#view');
+      const button = document.querySelector('button');
+
+      /** Enable uploading only after confirming the signed-in account's permissions. */
+      async function checkUploadAccess() {
+        button.disabled = true;
+        const response = await fetch('/api/me');
+        if (!response.ok) {
+          throw new Error('Log in using the accounts link before uploading.');
+        }
+
+        const { user } = await response.json();
+        if (!user.roles.includes('admin') && !user.roles.includes('upload-models')) {
+          throw new Error('Your account does not have the upload-models role.');
+        }
+
+        button.disabled = false;
+        status.textContent = 'Logged in as ' + user.username + '.';
+      }
+
+      /** Upload the selected file and show a viewer link when its format is supported. */
+      async function uploadSelectedFile(event) {
+        event.preventDefault();
+        const file = fileInput.files[0];
+        link.hidden = true;
+
+        // Give immediate feedback; the server independently enforces this limit.
+        if (!file || file.size > MAX_UPLOAD_BYTES) {
+          status.textContent = 'Choose a file no larger than 50 MB.';
+          return;
+        }
+
+        // Prevent duplicate submissions until the request finishes.
+        button.disabled = true;
+        status.textContent = 'Uploading…';
+
+        try {
+          // The API accepts raw file bytes, rather than a multipart form body.
+          const response = await fetch('/upload?filename=' + encodeURIComponent(file.name), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/octet-stream' },
+            body: file,
+          });
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.error || 'Upload failed.');
+          }
+
+          status.textContent = 'Uploaded ' + result.filename;
+          // Supporting buffers/textures can upload, but cannot open in the viewer.
+          link.href = '/?model=' + encodeURIComponent(result.filename);
+          link.hidden = !/\.(glb|gltf)$/i.test(result.filename);
+        } catch (error) {
+          status.textContent = error.message;
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      form.addEventListener('submit', uploadSelectedFile);
+      checkUploadAccess().catch(error => {
+        status.textContent = error.message;
+      });
+    </script>
+  </body>
 </html>

@@ -4,8 +4,11 @@ services:
   viewer:
     image: ${VIEWER_IMAGE:-model-preview:latest}
     environment:
-      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
-      UPLOAD_ALLOWED_IPS: "${UPLOAD_ALLOWED_IPS:-0.0.0.0/0 ::/0}"
+      APP_ORIGIN: "${APP_ORIGIN:-http://localhost:8090}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-true}"
+      ADMIN_USERNAME: "${ADMIN_USERNAME:-admin}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-}"
+      ADMIN_PASSWORD_FILE: "${ADMIN_PASSWORD_FILE:-}"
     ports:
       - target: 80
         published: ${PORT:-8080}
@@ -15,6 +18,9 @@ services:
       - type: bind
         source: ${MODELS_DIR:-/srv/model-preview/models}
         target: /srv/models
+      - type: bind
+        source: ${AUTH_DIR:-/srv/model-preview/auth-data}
+        target: /data/auth
     deploy:
       replicas: 1
       placement:

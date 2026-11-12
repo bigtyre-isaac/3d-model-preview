@@ -22,7 +22,96 @@
       position: absolute;
       top: 16px;
       left: 16px;
+      max-width: calc(100% - 200px);
+      overflow-wrap: anywhere;
       pointer-events: none;
+    }
+
+    /* Keep account access visible without covering the viewer with a full header. */
+    .account-navigation {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 1;
+      display: flex;
+      gap: 8px;
+    }
+
+    .account-navigation a,
+    .account-navigation button {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #333;
+      font-size: 14px;
+      text-decoration: none;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .account-navigation a:hover,
+    .account-navigation button:hover {
+      background: #fff;
+      border-color: #888;
+      text-decoration: underline;
+    }
+
+    .account-navigation a:focus-visible,
+    .account-navigation button:focus-visible {
+      outline: 2px solid #245db0;
+      outline-offset: 3px;
+    }
+
+    .account-navigation [hidden] {
+      display: none;
+    }
+
+    /* Collapse the index while viewing a model so it stays out of the way. */
+    .model-browser {
+      position: absolute;
+      top: 76px;
+      left: 16px;
+      z-index: 1;
+      width: min(360px, calc(100% - 32px));
+      box-sizing: border-box;
+      padding: 18px;
+      border: 1px solid #e2e2e2;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+    }
+
+    .model-browser summary {
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .model-browser ul {
+      max-height: 60vh;
+      overflow-y: auto;
+      margin: 16px 0 0;
+      padding-left: 20px;
+    }
+
+    .model-browser li {
+      margin: 10px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .model-browser a {
+      color: #43566b;
+      text-underline-offset: 3px;
+    }
+
+    #model-list-status {
+      color: #666;
+      margin-bottom: 0;
+    }
+
+    #model-list-status:empty {
+      display: none;
     }
   </style>
   <script type="module"
@@ -36,6 +125,17 @@
     shadow-intensity="1">
   </model-viewer>
   <div id="status" role="status"></div>
+  <nav class="account-navigation" aria-label="Account">
+    <a id="upload-link" href="/upload" hidden>Upload</a>
+    <a id="account-link" href="/account">Log in / accounts</a>
+    <button id="logout" type="button" hidden>Log out</button>
+  </nav>
+  <details id="model-browser" class="model-browser" hidden>
+    <summary>Models</summary>
+    <p id="model-list-status" role="status"></p>
+    <ul id="model-list"></ul>
+  </details>
+  <script type="module" src="/homepage.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
     const status = document.querySelector('#status');

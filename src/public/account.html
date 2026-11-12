@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Model accounts</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 64px 20px;
+        background: #eee;
+        color: #222;
+        font: 15px/1.5 system-ui, sans-serif;
+      }
+
+      /* The login card stays compact; account management gets more room. */
+      .account-card {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 32px;
+        border: 1px solid #e2e2e2;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+      }
+
+      .account-card:has(#session[hidden]) {
+        max-width: 480px;
+      }
+
+      nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+      }
+
+      a {
+        color: #43566b;
+        text-underline-offset: 3px;
+      }
+
+      nav a {
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #1b3047;
+        text-decoration: underline;
+      }
+
+      h1 {
+        margin: 24px 0 8px;
+        font-size: 26px;
+        line-height: 1.25;
+        letter-spacing: -0.5px;
+      }
+
+      h2 {
+        margin: 32px 0 16px;
+        font-size: 20px;
+      }
+
+      #status {
+        margin: 0 0 24px;
+        color: #666;
+        white-space: pre-wrap;
+      }
+
+      #status:empty {
+        display: none;
+      }
+
+      /* Keep form errors next to the action that needs attention. */
+      .form-error {
+        margin: 12px 0 0;
+        color: #b42318;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      }
+
+      .form-error:empty {
+        display: none;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 18px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      input {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        margin-top: 6px;
+        padding: 11px 12px;
+        border: 1px solid #cfd3d8;
+        border-radius: 7px;
+        background: #fff;
+        color: #222;
+        font: inherit;
+      }
+
+      /* Role and disabled checkboxes stay beside their labels, including generated forms. */
+      label:has(input[type='checkbox']) {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        font-weight: 400;
+      }
+
+      input[type='checkbox'] {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        padding: 0;
+        accent-color: #34475a;
+      }
+
+      button {
+        padding: 10px 16px;
+        border: 1px solid #34475a;
+        border-radius: 7px;
+        background: #34475a;
+        color: #fff;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #243545;
+      }
+
+      button:disabled {
+        opacity: 0.55;
+        cursor: wait;
+      }
+
+      input:focus-visible,
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #adc4df;
+        outline-offset: 3px;
+      }
+
+      #loginForm button {
+        width: 100%;
+        margin-top: 4px;
+      }
+
+      #logout,
+      #logoutAll {
+        margin: 0 8px 8px 0;
+        border-color: #d5d9de;
+        background: #f7f8fa;
+        color: #34475a;
+      }
+
+      #logout:hover,
+      #logoutAll:hover {
+        background: #eceff3;
+      }
+
+      fieldset {
+        min-width: 0;
+        margin: 24px 0;
+        padding: 20px;
+        border: 1px solid #e1e4e8;
+        border-radius: 10px;
+      }
+
+      legend {
+        padding: 0 8px;
+        font-weight: 600;
+      }
+
+      fieldset button {
+        margin-top: 8px;
+      }
+
+      .account-row {
+        margin: 10px 0;
+        border: 1px solid #e1e4e8;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .account-row summary {
+        padding: 16px 20px;
+        background: #f7f8fa;
+        cursor: pointer;
+      }
+
+      .account-row summary:hover {
+        background: #eceff3;
+      }
+
+      .account-row summary:focus-visible {
+        outline: 3px solid #adc4df;
+        outline-offset: -3px;
+      }
+
+      .account-name {
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+
+      .account-description {
+        display: block;
+        margin: 4px 0 0 18px;
+        color: #666;
+        font-size: 13px;
+        overflow-wrap: anywhere;
+      }
+
+      /* The disclosure provides the border and name; retain the form's field grouping. */
+      .account-row fieldset {
+        margin: 0;
+        border: 0;
+      }
+
+      .account-row legend {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+
+      li {
+        margin: 10px 0;
+        overflow-wrap: anywhere;
+      }
+
+      section[hidden] {
+        display: none;
+      }
+
+      @media (max-width: 520px) {
+        body {
+          padding: 24px 16px;
+        }
+
+        .account-card {
+          padding: 24px;
+        }
+
+        fieldset {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="account-card">
+      <nav>
+        <a href="/">Viewer</a>
+        <a href="/upload">Upload</a>
+      </nav>
+      <h1>Model accounts</h1>
+      <p id="status" role="status"></p>
+
+      <!-- Visible until a browser session has been loaded or created. -->
+      <section id="login">
+        <form id="loginForm">
+          <label>
+            Username
+            <input name="username" autocomplete="username" required maxlength="64" />
+          </label>
+          <label>
+            Password
+            <input
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              maxlength="256"
+            />
+          </label>
+          <button>Log in</button>
+        </form>
+      </section>
+
+      <!-- Account controls are shown only after authentication. -->
+      <section id="session" hidden>
+        <p id="identity"></p>
+        <button id="logout">Log out</button>
+        <button id="logoutAll">Log out all sessions</button>
+        <form id="passwordForm">
+          <fieldset>
+            <legend>Change password</legend>
+            <label>
+              Current password
+              <input
+                name="currentPassword"
+                type="password"
+                autocomplete="current-password"
+                required
+              />
+            </label>
+            <label>
+              New password
+              <input
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                minlength="12"
+                maxlength="256"
+                required
+              />
+            </label>
+            <button>Change password</button>
+          </fieldset>
+        </form>
+
+        <!-- The script enables these sections according to the current roles. -->
+        <section id="models" hidden>
+          <h2>Models</h2>
+          <ul id="modelList"></ul>
+        </section>
+
+        <section id="admin" hidden>
+          <h2>Accounts</h2>
+          <form id="createForm">
+            <fieldset>
+              <legend>Create account</legend>
+              <label>
+                Username
+                <input name="username" required pattern="[A-Za-z0-9_.-]{1,64}" autocomplete="off" />
+              </label>
+              <label>
+                Password
+                <input
+                  name="password"
+                  type="password"
+                  required
+                  minlength="12"
+                  maxlength="256"
+                  autocomplete="new-password"
+                />
+              </label>
+              <div id="newRoles"></div>
+              <button>Create account</button>
+            </fieldset>
+          </form>
+          <div id="users"></div>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="/account.js"></script>
+  </body>
+</html>

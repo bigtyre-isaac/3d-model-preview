@@ -3,12 +3,20 @@ services:
     build: .
     image: ${VIEWER_IMAGE:-model-preview:latest}
     environment:
-      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
-      UPLOAD_ALLOWED_IPS: "${UPLOAD_ALLOWED_IPS:-0.0.0.0/0 ::/0}"
+      APP_ORIGIN: "${APP_ORIGIN:-http://localhost:8090}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-true}"
+      ADMIN_USERNAME: "${ADMIN_USERNAME:-admin}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-}"
+      ADMIN_PASSWORD_FILE: "${ADMIN_PASSWORD_FILE:-}"
+    env_file:
+      - .env
     ports:
-      - "${PORT:-8080}:80"
+      - "${PORT:-8090}:80"
     volumes:
       - type: bind
         source: ${MODELS_DIR:-./models}
         target: /srv/models
+      - type: bind
+        source: ${AUTH_DIR:-./auth-data}
+        target: /data/auth
     restart: unless-stopped
