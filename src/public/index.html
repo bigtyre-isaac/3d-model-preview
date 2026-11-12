@@ -126,6 +126,7 @@
   </model-viewer>
   <div id="status" role="status"></div>
   <nav class="account-navigation" aria-label="Account">
+    <a id="download-link" hidden>Download</a>
     <a id="upload-link" href="/upload" hidden>Upload</a>
     <a id="account-link" href="/account">Log in / accounts</a>
     <button id="logout" type="button" hidden>Log out</button>
@@ -167,7 +168,14 @@
       });
 
       // Encode segments separately to preserve subfolders and literal #/? in names.
-      viewer.src = '/models/' + filename.split('/').map(encodeURIComponent).join('/');
+      const modelUrl = '/models/' + filename.split('/').map(encodeURIComponent).join('/');
+      viewer.src = modelUrl;
+
+      // Download the original public file using the same validated path as the viewer.
+      const downloadLink = document.querySelector('#download-link');
+      downloadLink.href = modelUrl;
+      downloadLink.download = filename.split('/').pop();
+      downloadLink.hidden = false;
     }
   </script>
 </body>
